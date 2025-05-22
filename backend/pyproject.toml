@@ -1,0 +1,10 @@
+[tool.poetry]
+name = "cs348-backend"
+version = "0.1.0"
+description = "cs348 project"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+psycopg2-binary = "^2.9"
+psycopg2 = "^2.9.10"
+python-dotenv = "^1.1.0"
