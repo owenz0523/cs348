@@ -1,7 +1,6 @@
 # cs348
-Make sure to initialize the env variables first
+Make sure to initialize the env variables first with a local postgresql database
 
-# Running the sample app 
 cd backend
 <br>
 poetry install
