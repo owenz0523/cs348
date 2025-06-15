@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from backend.app import has_played_for_both_teams, get_players_with_prefix, get_players_with_teams
+from backend.app import has_played_for_both_teams, get_players_with_prefix, get_players_with_teams, get_hint_for_teams
 
 app = FastAPI()
 
@@ -46,4 +46,14 @@ def retrieve_players_by_teams(teams: Teams):
     return JSONResponse(
         status_code=200,
         content=players
+    )
+
+@app.post("/retrieve_hint_for_teams")
+def retrieve_hint_for_teams(teams: Teams):
+    tid1 = teams.tid1
+    tid2 = teams.tid2
+    hint = get_hint_for_teams(tid1, tid2)
+    return JSONResponse(
+        status_code=200,
+        content=hint
     )

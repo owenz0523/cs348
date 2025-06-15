@@ -84,4 +84,21 @@ def get_players_with_teams(tid1: str, tid2: str):
     finally:
         conn.close()
 
+def get_hint_for_teams(tid1: str, tid2: str):
+    sql = load_sql("queries/get_hint_for_teams.sql")  # Filepath assumes backend app is run from the root directory (cs348)
+    conn = connect()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (tid1, tid2, tid1, tid2, tid2, tid1, tid1, tid2))
+            rows = cursor.fetchall()
+            return [
+                {
+                    "pid": row[0],
+                    "pname": row[1],
+                    "correct_answer": True if row[2] == 1 else False,
+                } for row in rows
+            ]
+    finally:
+        conn.close()
+
 run_test_query()
