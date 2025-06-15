@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from backend.app import has_played_for_both_teams, get_players_with_prefix
+from backend.app import has_played_for_both_teams, get_players_with_prefix, get_players_with_teams
 
 app = FastAPI()
 
@@ -29,6 +29,20 @@ def retrieve_suggested_players(prefix: str):
             content={"error": "Player name prefix cannot be empty"}
         )
     players = get_players_with_prefix(prefix)
+    return JSONResponse(
+        status_code=200,
+        content=players
+    )
+
+class Teams(BaseModel):
+    tid1: str
+    tid2: str
+
+@app.post("/retrieve_players_by_teams")
+def retrieve_players_by_teams(teams: Teams):
+    tid1 = teams.tid1
+    tid2 = teams.tid2
+    players = get_players_with_teams(tid1, tid2)
     return JSONResponse(
         status_code=200,
         content=players
