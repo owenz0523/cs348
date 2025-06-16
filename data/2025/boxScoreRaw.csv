@@ -1,4 +1,4 @@
-Rk,Player,MP,Date,Age,Team,,Opp,Result,GS,MP,FG,FGA,FG%,2P,2PA,2P%,3P,3PA,3P%,FT,FTA,FT%,TS%,ORB,DRB,TRB,AST,STL,BLK,TOV,PF,PTS,GmSc,BPM,+/-,Pos.,PlayerID
+Rk,Player,MP,Date,Age,Team,,Opp,Result,GS,MP,FG,FGA,FG%,2P,2PA,2P%,3P,3PA,3P%,FT,FTA,FT%,TS%,ORB,DRB,TRB,AST,STL,BLK,TOV,PF,PTS,GmSc,BPM,+/-,Pos.,Player-additional
 1,Steven Adams,0,2025-02-25,31-220,HOU,,MIL,W 100-97,,0,0,0,,0,0,,0,0,,0,0,,,0,0,0,0,0,0,0,0,0,0.0,-6.2,,C,adamsst01
 2,Steven Adams,0,2025-03-17,31-240,HOU,,PHI,W 144-137 (OT),,0,0,0,,0,0,,0,0,,0,0,,,0,0,0,0,0,0,0,0,0,0.0,-9.9,2,C,adamsst01
 3,Trey Alexander,0,2025-01-07,21-250,DEN,,BOS,L 106-118,,0,0,0,,0,0,,0,0,,0,0,,,0,0,0,0,0,0,0,0,0,0.0,-7.5,0,G,alexatr01
