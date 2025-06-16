@@ -10,7 +10,6 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 BASE_DIR = os.path.dirname(__file__)
-SEASON = 2025 # only have one season of data for now (sample)
 GAME_TYPE = "Regular" # only have regular season data for now (sample)
 
 
@@ -24,7 +23,7 @@ conn = psycopg2.connect(
 )
 cur = conn.cursor()
 
-# Load teams
+# Load teams (same 30 teams over last 10 years)
 csv_path = os.path.join(BASE_DIR, 'teamsRaw.csv')
 df = pd.read_csv(csv_path)
 for _, row in df.iterrows():
@@ -37,82 +36,93 @@ for _, row in df.iterrows():
     )
 
 
-# Load players + player team relationships
-csv_path = os.path.join(BASE_DIR, 'playersRaw.csv')
-df = pd.read_csv(csv_path)
-for _, row in df.iterrows():
-    cur.execute(
-        """
-        INSERT INTO players (pid, pname)
-        VALUES (%s, %s)
-        """,
-        (row["PlayerID"], row["Player"])
-    )
+# will map game_date, tid to its unique gid to be used in box score later
+gid_index = 1
+gid_of = dict()
+pid_exists = dict()
 
-    # players may be traded mid season so may play for 2+ teams in season
-    teams = row["Team"]
-    team_ind = 0
-    while team_ind < len(teams):
+# Load data for last 10 years
+for season in range(2015, 2026, 1):
+    SEASON_DIR = BASE_DIR + f"/{season}"
+
+    # Load players + player team relationships
+    csv_path = os.path.join(SEASON_DIR, 'playersRaw.csv')
+    df = pd.read_csv(csv_path)
+    for _, row in df.iterrows():
+        # Only add player if unadded before
+        if row["Player-additional"] not in pid_exists.keys():
+            cur.execute(
+                """
+                INSERT INTO players (pid, pname)
+                VALUES (%s, %s)
+                """,
+                (row["Player-additional"], row["Player"])
+            )
+            pid_exists[row["Player-additional"]] = True
+
+        # players may be traded mid season so may play for 2+ teams in season
+        teams = row["Team"]
+        team_ind = 0
+        while team_ind < len(teams):
+            cur.execute(
+                """
+                INSERT INTO plays_for (pid, tid, season)
+                VALUES (%s, %s, %s)
+                """,
+                (row["Player-additional"], teams[team_ind:team_ind+3], season)
+            )
+            team_ind += 3
+
+
+    # Load games
+    csv_path = os.path.join(SEASON_DIR, 'gamesRaw.csv')
+    df = pd.read_csv(csv_path)
+    for _, row in df.iterrows():
+        # Team = Home team, Opp = Away team
+        winner = row["Team"] if row["Result"] == "W" else row["Opp"]
         cur.execute(
             """
-            INSERT INTO plays_for (pid, tid, season)
-            VALUES (%s, %s, %s)
+            INSERT INTO games (season, game_date, tid_home, tid_away, winner, game_type)
+            VALUES (%s, %s, %s, %s, %s, %s)
             """,
-            (row["PlayerID"], teams[team_ind:team_ind+3], SEASON)
+            (season, row["Date"], row["Team"], row["Opp"], winner, GAME_TYPE)
         )
-        team_ind += 3
 
+        gid_of[(row["Date"], row["Team"])] = gid_index
+        gid_of[(row["Date"], row["Opp"])] = gid_index
+        gid_index +=1
 
-# Load games
-csv_path = os.path.join(BASE_DIR, 'gamesRaw.csv')
-df = pd.read_csv(csv_path)
-gid_index = 1
-# will map game_date, tid to its unique gid to be used in box score
-gid_of = dict()
-for _, row in df.iterrows():
-    winner = row["Home"] if row["Result"] == "W" else row["Away"]
-    cur.execute(
-        """
-        INSERT INTO games (season, game_date, tid_home, tid_away, winner, game_type)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        """,
-        (SEASON, row["Date"], row["Home"], row["Away"], winner, GAME_TYPE)
-    )
-
-    gid_of[(row["Date"], row["Home"])] = gid_index
-    gid_of[(row["Date"], row["Away"])] = gid_index
-    gid_index +=1
-
-# Load box scores
-csv_path = os.path.join(BASE_DIR, 'boxScoreRaw.csv')
-df = pd.read_csv(csv_path)
-for _, row in df.iterrows():
-    cur.execute(
-        """
-        INSERT INTO box_score (
-            pid, gid, mins, pts, reb, ast, stl, blk, tov,
-            fta, ft, fga, fg, fg3a, fg3, plus_minus
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """,
-        (
-            row["PlayerID"],
-            gid_of[(row["Date"], row["Team"])],
-            row["MP"],
-            row["PTS"],
-            row["TRB"],
-            row["AST"],
-            row["STL"],
-            row["BLK"],
-            row["TOV"],
-            row["FTA"],
-            row["FT"],
-            row["FGA"],
-            row["FG"],
-            row["3PA"],
-            row["3P"],
-            row["+/-"]
-        )
-    )
+    # Load box scores ONLY for 2025 season
+    if season == 2025:
+        csv_path = os.path.join(SEASON_DIR, 'boxScoreRaw.csv')
+        df = pd.read_csv(csv_path)
+        for _, row in df.iterrows():
+            cur.execute(
+                """
+                INSERT INTO box_score (
+                    pid, gid, mins, pts, reb, ast, stl, blk, tov,
+                    fta, ft, fga, fg, fg3a, fg3, plus_minus
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    row["Player-additional"],
+                    gid_of[(row["Date"], row["Team"])],
+                    row["MP"],
+                    row["PTS"],
+                    row["TRB"],
+                    row["AST"],
+                    row["STL"],
+                    row["BLK"],
+                    row["TOV"],
+                    row["FTA"],
+                    row["FT"],
+                    row["FGA"],
+                    row["FG"],
+                    row["3PA"],
+                    row["3P"],
+                    row["+/-"]
+                )
+            )
 
 conn.commit()
 cur.close()
