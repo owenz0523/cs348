@@ -38,3 +38,13 @@ DB_PORT=5432
    `poetry run uvicorn backend.main:app`
 
 4. You can send requests to the backend at `http://localhost:8000` using a tool like Postman or curl
+
+### Running frontend application
+
+1. cd `/cs348/frontend` folder
+
+2. Install the dependencies with:  
+   `npm install`
+
+3. Run the application with:  
+   `npm run dev`
