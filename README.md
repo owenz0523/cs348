@@ -30,6 +30,10 @@ DB_PORT=5432
 6. (This may take 10-15 seconds) Load the data with:  
    `poetry run python load.py`
 
+## Testing the (sample) dataset
+
+1. Run the command `psql -d nba_stats -f queries/test-sample.sql > queries/test-sample.out`
+
 ### Running backend application
 
 1. Open a new terminal session and `cd` to the `/cs348/backend` folder
