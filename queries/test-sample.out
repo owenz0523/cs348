@@ -23,16 +23,6 @@
  Box_score table count: | 26306
 (1 row)
 
-             test_description             
-------------------------------------------
- Testing player search by prefix (LeBron)
-(1 row)
-
-    pid    |    pname     
------------+--------------
- jamesle01 | LeBron James
-(1 row)
-
        test_description       
 ------------------------------
  Available teams for testing:
@@ -79,4 +69,56 @@
  Anthony Edwards         |   44 |  53 |   6 |   2 |   0 |   0 |   6 |         -3
  Stephen Curry           |   37 |  52 |  10 |   8 |   5 |   1 |   2 |         17
 (10 rows)
+
+    test_description     
+-------------------------
+ Testing plays for table
+(1 row)
+
+    pid    | tid | season 
+-----------+-----+--------
+ benimje01 | UTA |   2015
+ bhullsi01 | SAC |   2015
+ leema01   | PHI |   2015
+ moreler01 | SAC |   2015
+ lucaska01 | MEM |   2015
+(5 rows)
+
+             test_description             
+------------------------------------------
+ Testing player search by prefix (LeBron)
+(1 row)
+
+    pid    |    pname     
+-----------+--------------
+ jamesle01 | LeBron James
+(1 row)
+
+     test_description     
+--------------------------
+ Testing players by teams
+(1 row)
+
+    pid    |      pname      
+-----------+-----------------
+ fernabr01 | Bruno Fernando
+ horfoal01 | Al Horford
+ muscami01 | Mike Muscala
+ parkeja01 | Jabari Parker
+ rondora01 | Rajon Rondo
+ schrode01 | Dennis Schröder
+ teaguje01 | Jeff Teague
+ turneev01 | Evan Turner
+ zellety01 | Tyler Zeller
+(9 rows)
+
+               test_description                
+-----------------------------------------------
+ Testing check if player played for both teams
+(1 row)
+
+    pid    |      pname       | tid1 | tid2 | played_for_both 
+-----------+------------------+------+------+-----------------
+ benimje01 | Jerrelle Benimon | ATL  | BOS  | No
+(1 row)
 
