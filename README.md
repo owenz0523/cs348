@@ -15,29 +15,32 @@ DB_PORT=5432
 
 ### Loading the (sample) dataset
 
-1. Start a psql terminal session with:  
+1. Start a psql terminal session from the `cs348` directory with:  
    `psql -U postgres -h localhost -p 5432 -d postgres`
 
 2. Enter your local password that you set up earlier when prompted  
-3. Initialize the tables with:  
+3. (Re)Initialize the tables with:  
    `\i queries/init/reset.sql`
 
-4. Open a new terminal session in the `/cs348` folder (where `poetry.lock` is located)
+4. Open a new terminal session and `cd` to the `/cs348/data` folder
 
-5. (This may take 10-15 seconds) Load the data with:  
-   `poetry run python data/load.py`
+5. Install the dependencies with:  
+   `poetry install`
+
+6. (This may take 10-15 seconds) Load the data with:  
+   `poetry run python load.py`
 
 ### Running backend application
 
-1. Open a terminal session in the `/cs348` folder
+1. Open a new terminal session and `cd` to the `/cs348/backend` folder
 
 2. Install the dependencies with:  
    `poetry install`
 
 3. Run the application with:  
-   `poetry run uvicorn backend.main:app`
+   `poetry run uvicorn main:app`
 
-4. You can send requests to the backend at `http://localhost:8000` using a tool like Postman or curl
+4. (For testing) You can send requests to the backend at `http://localhost:8000` using a tool like Postman or curl
 
 ### Running frontend application
 

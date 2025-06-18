@@ -1,9 +1,19 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from backend.app import has_played_for_both_teams, get_players_with_prefix, get_players_with_teams, get_hint_for_teams
+from app import has_played_for_both_teams, get_players_with_prefix, get_players_with_teams, get_hint_for_teams
 
 app = FastAPI()
+
+# Permit frontend CORS access
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class PlayerTeams(BaseModel):
     pid: str
