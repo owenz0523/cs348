@@ -110,3 +110,89 @@ SELECT
         ELSE 'No'
     END AS played_for_both
 FROM sample_player p, team1 t1, team2 t2;
+
+-- testing hint generation
+SELECT 'Testing hint generation' AS test_description;
+WITH team_pair AS (
+    SELECT tid FROM teams LIMIT 2
+),
+team1 AS (SELECT tid FROM team_pair LIMIT 1),
+team2 AS (SELECT tid FROM team_pair OFFSET 1),
+
+players_both_teams AS (
+    SELECT pid, pname, 1 AS table_order
+    FROM (
+        SELECT DISTINCT p.pid, p.pname
+        FROM plays_for pf
+        INNER JOIN players p ON p.pid = pf.pid, team1 t1, team2 t2
+        WHERE pf.tid = t1.tid
+        AND EXISTS (
+            SELECT 1
+            FROM plays_for pf1
+            WHERE pf1.pid = pf.pid AND pf1.tid = t2.tid
+        )
+    ) AS played_for_both_teams
+    ORDER BY random()
+    LIMIT 1
+),
+
+players_one_team AS (
+    SELECT pid, pname, 2 AS table_order
+    FROM (
+        SELECT DISTINCT p.pid, p.pname
+        FROM plays_for pf
+        INNER JOIN players p ON p.pid = pf.pid, team1 t1, team2 t2
+        WHERE (pf.tid = t1.tid
+        AND NOT EXISTS (
+            SELECT 1
+            FROM plays_for pf1
+            WHERE pf1.pid = pf.pid AND pf1.tid = t2.tid
+        ))
+        OR (pf.tid = t2.tid
+        AND NOT EXISTS (
+            SELECT 1
+            FROM plays_for pf1
+            WHERE pf1.pid = pf.pid AND pf1.tid = t1.tid
+        ))
+    ) as played_for_one_team
+    ORDER BY random()
+    LIMIT 3
+),
+
+players_none_teams AS (
+    SELECT pid, pname, 3 AS table_order
+    FROM (
+        SELECT DISTINCT p.pid, p.pname
+        FROM players p, team1 t1, team2 t2
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM plays_for pf
+            WHERE pf.pid = p.pid AND pf.tid IN (t1.tid, t2.tid)
+        )
+    ) as played_for_none_teams
+    ORDER BY random()
+    LIMIT 3
+),
+
+combined_players AS (
+    SELECT pid, pname, table_order
+    FROM players_both_teams
+    UNION ALL
+    SELECT pid, pname, table_order
+    FROM players_one_team
+    UNION ALL
+    SELECT pid, pname, table_order
+    FROM players_none_teams
+)
+SELECT 
+    pid, 
+    pname, 
+    CASE 
+        WHEN table_order = 1 THEN 'Both Teams'
+        WHEN table_order = 2 THEN 'One Team'
+        WHEN table_order = 3 THEN 'Neither Team'
+    END AS hint_category,
+    table_order
+FROM combined_players
+ORDER BY table_order
+LIMIT 4;

@@ -122,3 +122,16 @@
  benimje01 | Jerrelle Benimon | ATL  | BOS  | No
 (1 row)
 
+    test_description     
+-------------------------
+ Testing hint generation
+(1 row)
+
+    pid    |       pname        | hint_category | table_order 
+-----------+--------------------+---------------+-------------
+ schrode01 | Dennis Schröder    | Both Teams    |           1
+ howardw01 | Dwight Howard      | One Team      |           2
+ tillmxa01 | Xavier Tillman Sr. | One Team      |           2
+ capelca01 | Clint Capela       | One Team      |           2
+(4 rows)
+
