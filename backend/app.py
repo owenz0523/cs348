@@ -25,7 +25,7 @@ def remove_accents(input_str: str) -> str:
     return ''.join(c for c in normalized if not unicodedata.combining(c))
 
 def run_test_query():
-    sql = load_sql("queries/test.sql")  # Filepath assumes backend app is run from the root directory (cs348)
+    sql = load_sql("../queries/test.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()
     try:
         with conn.cursor() as cursor:
@@ -38,7 +38,7 @@ def run_test_query():
         conn.close()
 
 def has_played_for_both_teams(pid: str, tid1: str, tid2: str) -> bool:
-    sql = load_sql("queries/check_played_for_both_teams.sql") # Filepath assumes backend app is run from the root directory (cs348)
+    sql = load_sql("../queries/check_played_for_both_teams.sql") # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()
     try:
         with conn.cursor() as cursor:
@@ -53,7 +53,7 @@ def has_played_for_both_teams(pid: str, tid1: str, tid2: str) -> bool:
 def get_players_with_prefix(player_name_prefix: str):
     player_name_prefix = player_name_prefix.strip().lower() # Normalize input
     player_name_prefix = remove_accents(re.sub(r'[-\s]+', ' ', player_name_prefix)) # Remove accents and replace hyphens or multiple spaces with a single space
-    sql = load_sql("queries/get_players_by_prefix.sql")  # Filepath assumes backend app is run from the root directory (cs348)
+    sql = load_sql("../queries/get_players_by_prefix.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()
     try:
         with conn.cursor() as cursor:
@@ -69,7 +69,7 @@ def get_players_with_prefix(player_name_prefix: str):
         conn.close()
 
 def get_players_with_teams(tid1: str, tid2: str):
-    sql = load_sql("queries/get_players_by_teams.sql")  # Filepath assumes backend app is run from the root directory (cs348)
+    sql = load_sql("../queries/get_players_by_teams.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()
     try:
         with conn.cursor() as cursor:
@@ -85,7 +85,7 @@ def get_players_with_teams(tid1: str, tid2: str):
         conn.close()
 
 def get_hint_for_teams(tid1: str, tid2: str):
-    sql = load_sql("queries/get_hint_for_teams.sql")  # Filepath assumes backend app is run from the root directory (cs348)
+    sql = load_sql("../queries/get_hint_for_teams.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()
     try:
         with conn.cursor() as cursor:
