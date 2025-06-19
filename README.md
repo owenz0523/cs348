@@ -1,5 +1,10 @@
 # cs348
 
+### Current features
+As part of milestone 1, we have tic tac toe with teams as criteria on both rows and columns as the only game mode. Players must first enter an NBA player who has played for both the column and row teams, in order to play on that square. Players may request a hint by right clicking on the square, and four players will be displayed as hints, of which only one has played for both teams, and one or more others may have played for one of the teams. Once the game is complete, a query panel will appear on the left, allowing users to search for all players who have played for two selected teams. More advanced functionality will be implemented in future milestones. 
+
+### Database setup
+
 Make sure to download PostgreSQL locally, spin up a local DB cluster, and initialize the env variables first with a local PostgreSQL database. Also make sure psql is added to path so that you can start a terminal session anywhere (or you can just use the psql shell straight from your pc).
 
 ### Environment variables setup
