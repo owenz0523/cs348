@@ -49,3 +49,18 @@ CREATE TABLE box_score (
     FOREIGN KEY (pid) REFERENCES players(pid) ON DELETE CASCADE,
     FOREIGN KEY (gid) REFERENCES games(gid) ON DELETE CASCADE
 );
+
+CREATE TABLE match_history (
+    mid SERIAL PRIMARY KEY,
+    result TEXT CHECK (result IN ('P1 Win', 'P2 Win', 'Draw')),
+    played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE match_player_stats (
+    mid INT REFERENCES match_history(mid) ON DELETE CASCADE,
+    player_role TEXT CHECK (player_role IN ('P1', 'P2')),
+    correct_guesses INT,
+    incorrect_guesses INT,
+    hints_used INT,
+    PRIMARY KEY (mid, player_role)
+);

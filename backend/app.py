@@ -101,4 +101,15 @@ def get_hint_for_teams(tid1: str, tid2: str):
     finally:
         conn.close()
 
+def store_match_result_info(result, p1_stats, p2_stats):
+    sql = load_sql("../queries/insert_match_result.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
+    conn = connect()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (result, "P1", p1_stats.correct_guesses, p1_stats.incorrect_guesses, p1_stats.hints_used,
+                                 "P2", p2_stats.correct_guesses, p2_stats.incorrect_guesses, p2_stats.hints_used))
+            conn.commit()
+    finally:
+        conn.close()
+
 run_test_query()
