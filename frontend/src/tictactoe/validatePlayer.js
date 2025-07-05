@@ -9,8 +9,11 @@ const validatePlayer = async (playerName, team1, team2) => {
     const matchedPlayers = response.data; 
     console.log(matchedPlayers);
 
-    // Check if any close matched players played for both teams
+    // Check if any EXACT matched players played for both teams
     for(const player of matchedPlayers){
+        if(player.pname.toLowerCase() != playerName.toLowerCase()){
+            continue;
+        }
         const pid = player.pid;
         const response = await axios.post(
             "http://localhost:8000/check_played_for_both_teams",
