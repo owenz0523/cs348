@@ -112,6 +112,25 @@ def store_match_result_info(result, p1_stats, p2_stats):
     finally:
         conn.close()
 
+def get_match_history():
+    sql = load_sql("../queries/get_match_history.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
+    conn = connect()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            return [
+                {
+                    "mid": row[0],
+                    "result": row[1],
+                    "p1_stats": row[3],
+                    "p2_stats": row[4],
+                    "played_at": row[2].isoformat() if row[2] else None,
+                } for row in rows
+            ]
+    finally:
+        conn.close()
+
 def activate_clear_match_history_trigger():
     sql = load_sql("../queries/clear_match_history.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()

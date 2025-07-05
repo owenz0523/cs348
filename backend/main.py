@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import Literal
-from app import has_played_for_both_teams, get_players_with_prefix, get_players_with_teams, get_hint_for_teams, store_match_result_info
+from app import has_played_for_both_teams, get_players_with_prefix, get_players_with_teams, get_hint_for_teams, store_match_result_info, get_match_history
 
 app = FastAPI()
 
@@ -88,4 +88,12 @@ def insert_match_result(match_data: MatchData):
     return JSONResponse(
         status_code=200,
         content={"message": "Match result stored successfully"}
+    )
+
+@app.get("/retrieve_match_history")
+def retrieve_match_history():
+    match_history = get_match_history()
+    return JSONResponse(
+        status_code=200,
+        content=match_history
     )
