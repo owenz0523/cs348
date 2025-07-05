@@ -1,12 +1,16 @@
 import React, { useState, useEffect }  from "react";
 import initBoard from "../tictactoe/initBoard";
-import validatePlayer from "../tictactoe/validatePlayer";
 import getHint from "../tictactoe/getHint";
 
-const TicTacToe = ({winner, setWinner}) => {
-    const [board, setBoard] = useState(initBoard());
-    const [turn, setTurn] = useState("X");
-    const [hint, setHint] = useState([]);
+const TicTacToe = ({winner, setWinner, board, setBoard, hint, setHint, setActiveMove}) => {
+
+    useEffect(() => {
+        const loadBoard = async () => {
+            const initialBoard = await initBoard();
+            setBoard(initialBoard);
+        };
+        loadBoard();
+    }, []);
     
     // Check if board has a winner
     useEffect(() => {
@@ -34,30 +38,7 @@ const TicTacToe = ({winner, setWinner}) => {
         if(winner || row === 0 || col === 0 || board[row][col]){
             return;
         }
-
-        // Prompt for NBA player name
-        const playerName = prompt(`Player ${turn}, enter a valid NBA player to play this move:`);
-        const team1 = board[0][col];
-        const team2 = board[row][0];
-        if(!playerName || playerName === "" || playerName.trim() === ""){
-            alert(`Input player is empty! Please try again.`)
-            setHint([]);
-            return;
-        }
-
-        const isValid = await validatePlayer(playerName, team1, team2);
-        if(!isValid){
-            alert(`Input player has NOT played for both ${team1} and ${team2}! Please try again.`)
-            setHint([]);
-            return;
-        }
-
-        const updatedBoard = board.map((r, i) =>
-            r.map((c, j) => (i === row && j === col ? turn : c))
-        );
-        setBoard(updatedBoard);
-        setTurn(turn === "X" ? "O" : "X");
-        setHint([]);
+        setActiveMove({"row": row, "col": col});
     };
 
     const handleMenu = async (e, row, col) => {
@@ -71,7 +52,7 @@ const TicTacToe = ({winner, setWinner}) => {
 
     return (
         <div className="p-4 flex flex-col items-center">
-            <h2 className="text-lg font-semibold mb-4">Tic Tac Toe</h2>
+            <h2 className="text-lg font-semibold mb-4">NBA Tic Tac Toe</h2>
             <div className="grid grid-cols-4 gap-0">
                 {board.map((row, rowIndex) =>
                     row.map((cell, colIndex) => (

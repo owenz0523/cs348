@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import searchPlayers from "../query_panel/search_players";
+import searchPlayers from "../post_game_query_panel/search_players";
 
-const QueryPanel = () => {
+const PostGameQueryPanel = () => {
     const [team1, setTeam1] = useState("");
     const [team2, setTeam2] = useState("");
     const [queryResults, setQueryResults] = useState([]);
@@ -50,4 +50,4 @@ const QueryPanel = () => {
     )
 };
 
-export default QueryPanel;
+export default PostGameQueryPanel;
