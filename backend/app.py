@@ -112,4 +112,15 @@ def store_match_result_info(result, p1_stats, p2_stats):
     finally:
         conn.close()
 
+def activate_clear_match_history_trigger():
+    sql = load_sql("../queries/clear_match_history.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
+    conn = connect()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+            conn.commit()
+    finally:
+        conn.close()
+
 run_test_query()
+activate_clear_match_history_trigger()
