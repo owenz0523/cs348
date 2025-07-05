@@ -131,6 +131,26 @@ def get_match_history():
     finally:
         conn.close()
 
+def get_match_rows_cols():
+    sql = load_sql("../queries/generate_match_rows_cols.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
+    conn = connect()
+    try:
+        with conn.cursor() as cursor:
+            result = None
+            while result is None:
+                cursor.execute(sql)
+                result = cursor.fetchone()
+            return {
+                "r1": result[0],
+                "r2": result[1],
+                "r3": result[2],
+                "c1": result[3],
+                "c2": result[4],
+                "c3": result[5]
+            }
+    finally:
+        conn.close()
+
 def activate_clear_match_history_trigger():
     sql = load_sql("../queries/clear_match_history.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()
