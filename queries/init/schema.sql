@@ -25,7 +25,11 @@ CREATE TABLE games (
     tid_home TEXT,
     tid_away TEXT,
     winner TEXT,
-    game_type TEXT
+    game_type TEXT,
+    FOREIGN KEY (tid_home) REFERENCES teams(tid) ON DELETE CASCADE,
+    FOREIGN KEY (tid_away) REFERENCES teams(tid) ON DELETE CASCADE,
+    FOREIGN KEY (winner) REFERENCES teams(tid) ON DELETE CASCADE,
+    CHECK (tid_home != tid_away AND (winner = tid_home OR winner = tid_away))
 );
 
 CREATE TABLE box_score (

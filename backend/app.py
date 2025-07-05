@@ -25,7 +25,7 @@ def remove_accents(input_str: str) -> str:
     return ''.join(c for c in normalized if not unicodedata.combining(c))
 
 def run_test_query():
-    sql = load_sql("../queries/test.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
+    sql = load_sql("../queries/tests/test.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()
     try:
         with conn.cursor() as cursor:
