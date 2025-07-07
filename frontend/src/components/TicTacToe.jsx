@@ -1,8 +1,11 @@
 import React, { useState, useEffect }  from "react";
-import initBoard from "../tictactoe/initBoard";
-import getHint from "../tictactoe/getHint";
+import initBoard from "../lib/tictactoe/initBoard";
+import getHint from "../lib/tictactoe/getHint";
 
-const TicTacToe = ({winner, setWinner, board, setBoard, hint, setHint, setActiveMove}) => {
+const TicTacToe = (
+    {winner, setWinner, playerStats, setPlayerStats, 
+        board, setBoard, hint, setHint, activeMove, setActiveMove, turn}
+) => {
 
     useEffect(() => {
         const loadBoard = async () => {
@@ -32,6 +35,17 @@ const TicTacToe = ({winner, setWinner, board, setBoard, hint, setHint, setActive
         if(board[3][1] && board[3][1] == board[2][2] && board[3][1] == board[1][3]){
             setWinner(board[3][1]);
         }
+
+        // Draw
+        let free = 0;
+        for(let i = 1; i <= 3; i++){
+            for(let j = 1; j <= 3; j++){
+                free += !board[i][j];
+            }
+        }
+        if(!free){
+            setWinner("Draw");
+        }
     }, [board]);
 
     const handleClick = async (row, col) => {
@@ -48,6 +62,10 @@ const TicTacToe = ({winner, setWinner, board, setBoard, hint, setHint, setActive
         const hintArray = await getHint(team1, team2);
         const hintPlayers = hintArray.map(p => p.pname);
         setHint(hintPlayers);
+
+        let newPlayerStats = playerStats;
+        newPlayerStats[turn].hints += 1;
+        setPlayerStats(newPlayerStats)
     };
 
     return (
@@ -58,12 +76,13 @@ const TicTacToe = ({winner, setWinner, board, setBoard, hint, setHint, setActive
                     row.map((cell, colIndex) => (
                         <div
                             key={`${rowIndex}-${colIndex}`}
-                            className={`w-20 h-20 border border-gray-400 flex items-center justify-center text-l font-bold cursor-pointer select-none ${
-                                rowIndex > 0 && colIndex > 0 ? "hover:bg-gray-100" : ""
-                            }`}
+                            className={`w-20 h-20 border border-gray-400 flex items-center justify-center text-l font-bold cursor-pointer select-none
+                                ${rowIndex > 0 && colIndex > 0 ? "hover:bg-gray-100" : ""}
+                                ${activeMove && rowIndex === activeMove.row && colIndex === activeMove.col ? "bg-blue-200 hover:bg-blue-100" : ""}
+                            `}
                             onClick={() => handleClick(rowIndex, colIndex)}
                             onContextMenu={(e) => handleMenu(e, rowIndex, colIndex)}
-                        >
+                            >
                             {cell}
                         </div>
                     ))
@@ -81,11 +100,19 @@ const TicTacToe = ({winner, setWinner, board, setBoard, hint, setHint, setActive
                 </div>
             }
 
-
             {winner && (
-                <div className="mt-4 p-2 border rounded bg-gray-50 text-sm text-gray-700 w-full max-w-md">
-                    <h3 className="font-semibold mb-2">Winner!</h3>
-                    {`Player ${winner}`}
+                <div className="mt-4 p-4 border rounded bg-gray-50 text-sm text-gray-700 w-full max-w-md">
+                    <h3 className="font-semibold mb-2">
+                        {winner === "Draw" ? "Draw!" : "Winner!"}
+                    </h3>
+                    {winner !== "Draw" && <p>{`Player ${winner}`}</p>}
+
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white font-medium rounded hover:bg-blue-600 transition"
+                        >
+                        Play Again
+                    </button>
                 </div>
             )}
         </div>
