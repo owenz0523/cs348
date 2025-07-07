@@ -37,7 +37,7 @@ DB_PORT=5432
 
 ### Testing the (sample) dataset
 
-1. Run the command `psql -d nba_stats -f queries/test-sample.sql > queries/test-sample.out`
+1. Run the command `psql -d nba_stats -f queries/tests/test-sample.sql > queries/tests/test-sample.out`
 
 ### Running backend application
 
