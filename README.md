@@ -18,7 +18,7 @@ DB_HOST=localhost
 DB_PORT=5432
 ```
 
-### Loading the (sample) dataset
+### Loading the dataset
 
 1. Start a psql terminal session from the `cs348` directory with:  
    `psql -U postgres -h localhost -p 5432 -d postgres`
@@ -32,7 +32,7 @@ DB_PORT=5432
 5. Install the dependencies with:  
    `poetry install`
 
-6. (This may take 10-15 seconds) Load the data with:  
+6. (This may take ~3-4 minutes) Load the data with:  
    `poetry run python load.py`
 
 ### Testing the (sample) dataset

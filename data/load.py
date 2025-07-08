@@ -1,7 +1,11 @@
 import os
+import time
 import pandas as pd
 import psycopg2
 from dotenv import load_dotenv
+
+print("Started loading data for 2015 to 2025 seasons")
+start_time = time.time()
 
 load_dotenv()
 DB_NAME = os.getenv("DB_NAME")
@@ -24,7 +28,7 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 # Load teams (same 30 teams over last 10 years)
-csv_path = os.path.join(BASE_DIR, 'teamsRaw.csv')
+csv_path = os.path.join(BASE_DIR, 'shared/teamsRaw.csv')
 df = pd.read_csv(csv_path)
 for _, row in df.iterrows():
     cur.execute(
@@ -43,6 +47,7 @@ pid_exists = dict()
 
 # Load data for last 10 years
 for season in range(2015, 2026, 1):
+    print(f"Started loading data for season: {season}")
     SEASON_DIR = BASE_DIR + f"/{season}"
 
     # Load players + player team relationships
@@ -92,39 +97,45 @@ for season in range(2015, 2026, 1):
         gid_of[(row["Date"], row["Opp"])] = gid_index
         gid_index +=1
 
-    # Load box scores ONLY for 2025 season
-    if season == 2025:
-        csv_path = os.path.join(SEASON_DIR, 'boxScoreRaw.csv')
-        df = pd.read_csv(csv_path)
-        for _, row in df.iterrows():
-            cur.execute(
-                """
-                INSERT INTO box_score (
-                    pid, gid, mins, pts, reb, ast, stl, blk, tov,
-                    fta, ft, fga, fg, fg3a, fg3, plus_minus
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """,
-                (
-                    row["Player-additional"],
-                    gid_of[(row["Date"], row["Team"])],
-                    row["MP"],
-                    row["PTS"],
-                    row["TRB"],
-                    row["AST"],
-                    row["STL"],
-                    row["BLK"],
-                    row["TOV"],
-                    row["FTA"],
-                    row["FT"],
-                    row["FGA"],
-                    row["FG"],
-                    row["3PA"],
-                    row["3P"],
-                    row["+/-"]
-                )
+    # Load box scores
+    csv_path = os.path.join(SEASON_DIR, 'boxScoreClean.csv')
+    df = pd.read_csv(csv_path)
+    for _, row in df.iterrows():
+        cur.execute(
+            """
+            INSERT INTO box_score (
+                pid, gid, mins, pts, reb, ast, stl, blk, tov,
+                fta, ft, fga, fg, fg3a, fg3, plus_minus
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                row["Player-additional"],
+                gid_of[(row["Date"], row["Team"])],
+                row["MP"],
+                row["PTS"],
+                row["TRB"],
+                row["AST"],
+                row["STL"],
+                row["BLK"],
+                row["TOV"],
+                row["FTA"],
+                row["FT"],
+                row["FGA"],
+                row["FG"],
+                row["3PA"],
+                row["3P"],
+                row["+/-"]
             )
+        )
+    print(f"Finished loading data for season: {season}")
 
 conn.commit()
 cur.close()
 conn.close()
-print("CSV data inserted successfully! Type shiii!")
+
+
+# End time tracking
+end_time = time.time()
+elapsed = end_time - start_time
+mins, secs = divmod(elapsed, 60)
+print(f"\nDone Loading! Total time elapsed: {int(mins)} minutes and {int(secs)} seconds.")
