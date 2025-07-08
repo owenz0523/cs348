@@ -39,6 +39,10 @@ DB_PORT=5432
 
 1. Run the command `psql -d nba_stats -f queries/tests/test-sample.sql > queries/tests/test-sample.out`
 
+### Testing the (production) dataset
+
+1. Run the command `psql -d nba_stats -f queries/tests/test-production.sql > queries/tests/test-production.out`
+
 ### Running backend application
 
 1. Open a new terminal session and `cd` to the `/cs348/backend` folder
