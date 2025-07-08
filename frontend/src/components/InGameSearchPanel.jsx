@@ -53,6 +53,10 @@ const InGameSearchPanel = ({playerStats, setPlayerStats, activeMove, setActiveMo
     setActiveMove(null);
   };
 
+  const handlePlayerClick = (playerName) => {
+    setPlayerPfx(playerName);
+  };
+
   return (
     <div className="p-4 border-r border-gray-300 flex flex-col">
       <h2 className="text-lg font-semibold mb-2">Enter a Player Name to Make a Move!</h2>
@@ -76,7 +80,13 @@ const InGameSearchPanel = ({playerStats, setPlayerStats, activeMove, setActiveMo
           <div className="h-64 overflow-y-auto pr-1">
             <ul className="list-disc list-inside">
               {queryResults.map((pname, index) => (
-                <li key={index} className="list-none">{pname}</li>
+                <li 
+                  key={index} 
+                  className="list-none cursor-pointer hover:bg-blue-100 px-2 py-1 rounded transition-colors"
+                  onClick={() => handlePlayerClick(pname)}
+                >
+                  {pname}
+                </li>
               ))}
             </ul>
           </div>
