@@ -68,4 +68,4 @@ end_time = time.time()
 elapsed = end_time - start_time
 # Print elapsed time in minutes and seconds
 mins, secs = divmod(elapsed, 60)
-print(f"\nDone! Total time elapsed: {int(mins)} minutes and {int(secs)} seconds.")
+print(f"\nDone Automated Extraction! Total time elapsed: {int(mins)} minutes and {int(secs)} seconds.")
