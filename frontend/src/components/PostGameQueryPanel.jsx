@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import searchPlayers from "../post_game_query_panel/search_players";
+import searchPlayers from "../lib/post_game_query_panel/search_players";
 
 const PostGameQueryPanel = () => {
     const [team1, setTeam1] = useState("");

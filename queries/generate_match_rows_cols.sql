@@ -15,7 +15,7 @@ sampled_rows AS ( -- Randomly sample 5 distinct row teams
     SELECT team FROM (
         SELECT DISTINCT team
         FROM adjacency
-    )
+    ) AS subquery
     ORDER BY random()
     LIMIT 5
 ),
@@ -24,7 +24,7 @@ sampled_columns AS ( -- Randomly sample 10 distinct column teams, excluding thos
         SELECT DISTINCT team
         FROM adjacency
         WHERE team NOT IN (SELECT team FROM sampled_rows)
-    )
+    ) AS subquery
     ORDER BY random()
     LIMIT 10
 ),

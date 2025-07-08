@@ -17,6 +17,7 @@ CREATE TABLE plays_for (
     FOREIGN KEY (tid) REFERENCES teams(tid) ON DELETE CASCADE
 );
 
+CREATE INDEX idx_plays_for_pid_tid ON plays_for(pid, tid);
 
 CREATE TABLE games (
     gid SERIAL PRIMARY KEY,
