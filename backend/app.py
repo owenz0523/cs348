@@ -151,6 +151,24 @@ def get_match_rows_cols():
     finally:
         conn.close()
 
+def get_player_statistic(pid: str):
+    transaction_sql = load_sql("../queries/choose_random_statistic.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
+    sql = load_sql("../queries/get_player_statistic.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
+    conn = connect()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(transaction_sql)
+            cursor.execute(sql, (pid,))
+            row = cursor.fetchone()
+            return {
+                "pid": pid,
+                "season": row[0],
+                "stat_name": row[1],
+                "avg_stat": float(row[2]) if row[2] else None,
+            }
+    finally:
+        conn.close()
+
 def activate_clear_match_history_trigger():
     sql = load_sql("../queries/clear_match_history.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()

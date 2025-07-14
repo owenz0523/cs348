@@ -69,3 +69,13 @@ CREATE TABLE match_player_stats (
     hints_used INT,
     PRIMARY KEY (mid, player_role)
 );
+
+CREATE TABLE random_stat (
+    stat_name TEXT PRIMARY KEY,
+    sort_direction TEXT CHECK (sort_direction IN ('asc', 'desc'))
+);
+
+CREATE TABLE last_displayed_stats (
+    stat TEXT PRIMARY KEY,
+    last_displayed TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
