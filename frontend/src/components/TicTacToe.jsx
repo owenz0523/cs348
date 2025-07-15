@@ -59,6 +59,9 @@ const TicTacToe = (
 
     const handleMenu = async (e, row, col) => {
         e.preventDefault();
+        if (board[row][col]) {
+            return;
+        }
         const team1 = board[0][col];
         const team2 = board[row][0];
         const hintArray = await getHint(team1, team2);
