@@ -79,3 +79,8 @@ CREATE TABLE last_displayed_stats (
     stat TEXT PRIMARY KEY,
     last_displayed TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE current_win_streak (
+    player_result TEXT CHECK (player_result IN ('P1 Win', 'P2 Win')),
+    streak_count INT
+);

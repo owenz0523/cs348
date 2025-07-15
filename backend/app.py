@@ -169,6 +169,22 @@ def get_player_statistic(pid: str):
     finally:
         conn.close()
 
+def get_match_win_streak():
+    sql = "SELECT * FROM current_win_streak;"
+    conn = connect()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+            row = cursor.fetchone()
+            if row is None:
+                return None
+            return {
+                "player_result": row[0],
+                "streak_count": row[1]
+            }
+    finally:
+        conn.close()
+
 def activate_clear_match_history_trigger():
     sql = load_sql("../queries/clear_match_history.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()
@@ -179,21 +195,16 @@ def activate_clear_match_history_trigger():
     finally:
         conn.close()
 
-def choose_random_statistic():
-    transaction_sql = load_sql("../queries/choose_random_statistic.sql")
+def activate_match_win_streak_detection_trigger():
+    sql = load_sql("../queries/check_match_win_streak.sql")  # Filepath assumes backend app is run from the backend directory (cs348/backend)
     conn = connect()
     try:
         with conn.cursor() as cursor:
-            cursor.execute(transaction_sql)
+            cursor.execute(sql)
             conn.commit()
-            cursor.execute("SELECT stat_name, sort_direction FROM random_stat LIMIT 1;")
-            row = cursor.fetchone()
-            if row:
-                return {"stat_name": row[0]}
-            else:
-                return None
     finally:
         conn.close()
 
 run_test_query()
 activate_clear_match_history_trigger()
+activate_match_win_streak_detection_trigger()

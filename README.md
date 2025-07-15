@@ -32,8 +32,6 @@ DB_PORT=5432
 5. Install the dependencies with:  
    `poetry install`
 
-   If you get `Error: The current project could not be installed: No file/folder found for package cs348-backend`, you can still continue with the next step.
-
 6. (This may take ~3-4 minutes) Load the data with:  
    `poetry run python load.py`
 
@@ -51,9 +49,7 @@ DB_PORT=5432
 
 2. Install the dependencies with:  
    `poetry install`
-
-   If you get `Error: The current project could not be installed: No file/folder found for package cs348-backend`, you can still continue with the next step.
-
+   
 3. Run the application with:  
    `poetry run uvicorn main:app`
 
