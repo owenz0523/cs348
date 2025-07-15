@@ -4,7 +4,7 @@ import getHint from "../lib/tictactoe/getHint";
 
 const TicTacToe = (
     {winner, setWinner, playerStats, setPlayerStats, 
-        board, setBoard, hint, setHint, activeMove, setActiveMove, turn, playerNames}
+        board, setBoard, hint, setHint, activeMove, setActiveMove, turn, playerNames, playerStatsCache}
 ) => {
     // Add state to track hovered cell
     const [hoveredCell, setHoveredCell] = useState(null);
@@ -98,9 +98,28 @@ const TicTacToe = (
 
             {hoveredCell &&
                 hoveredCell.row > 0 && hoveredCell.col > 0 &&
-                playerNames[hoveredCell.row] && playerNames[hoveredCell.row][hoveredCell.col] && (
-                    <div className="mt-2 text-md text-gray-700 font-medium">
-                        Player: {playerNames[hoveredCell.row][hoveredCell.col]}
+                playerNames[hoveredCell.row] && playerNames[hoveredCell.row][hoveredCell.col] && playerNames[hoveredCell.row][hoveredCell.col].pname && (
+                    <div className="mt-4 p-2 border rounded bg-gray-50 text-sm text-gray-700 w-full max-w-md">
+                        <h3 className="font-semibold mb-2">Player Info</h3>
+                        <div className="font-medium mb-1">{playerNames[hoveredCell.row][hoveredCell.col].pname}</div>
+                        {playerStatsCache && playerStatsCache[hoveredCell.row] && playerStatsCache[hoveredCell.row][hoveredCell.col] && (
+                            <table className="w-full text-left">
+                                <tbody>
+                                    <tr className="border-t">
+                                        <td className="pr-2 py-1 font-medium">Season:</td>
+                                        <td className="py-1">{playerStatsCache[hoveredCell.row][hoveredCell.col].season}</td>
+                                    </tr>
+                                    <tr className="border-t">
+                                        <td className="pr-2 py-1 font-medium">Stat:</td>
+                                        <td className="py-1">{playerStatsCache[hoveredCell.row][hoveredCell.col].stat_name}</td>
+                                    </tr>
+                                    <tr className="border-t">
+                                        <td className="pr-2 py-1 font-medium">Value:</td>
+                                        <td className="py-1">{playerStatsCache[hoveredCell.row][hoveredCell.col].avg_stat}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        )}
                     </div>
                 )
             }
