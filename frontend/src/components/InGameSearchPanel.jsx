@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import searchByPrefix from "../lib/in_game_search_panel/search_by_prefix";
 import validatePlayer from "../lib/tictactoe/validatePlayer";
 
-const InGameSearchPanel = ({playerStats, setPlayerStats, activeMove, setActiveMove, board, setBoard, turn, setTurn, setHint}) => {
+const InGameSearchPanel = ({playerStats, setPlayerStats, activeMove, setActiveMove, board, setBoard, turn, setTurn, setHint, playerNames, setPlayerNames}) => {
   const [playerPfx, setPlayerPfx] = useState("");
   const [queryResults, setQueryResults] = useState([]);
 
@@ -30,13 +30,14 @@ const InGameSearchPanel = ({playerStats, setPlayerStats, activeMove, setActiveMo
 
     const isValid = await validatePlayer(playerPfx, team1, team2);
     if(!isValid){
-        alert(`Input player has NOT played for both ${team1} and ${team2}! Please try again.`)
+        alert(`Input player has NOT played for both ${team1} and ${team2}! Turn has been switched to ${turn === "X" ? "O" : "X"}`)
         let newPlayerStats = playerStats;
         newPlayerStats[turn].incorrect += 1;
         setPlayerStats(newPlayerStats)
         setHint([]);
         setPlayerPfx("");
         setActiveMove(null);
+        setTurn(turn === "X" ? "O" : "X");
         return;
     }
 
@@ -44,6 +45,10 @@ const InGameSearchPanel = ({playerStats, setPlayerStats, activeMove, setActiveMo
         r.map((c, j) => (i === row && j === col ? turn : c))
     );
     setBoard(updatedBoard);
+    const updatedPlayerNames = playerNames.map((r, i) => 
+        r.map((c, j) => (i === row && j === col ? playerPfx : c))
+    );
+    setPlayerNames(updatedPlayerNames);
     let newPlayerStats = playerStats;
     newPlayerStats[turn].correct += 1;
     setPlayerStats(newPlayerStats)

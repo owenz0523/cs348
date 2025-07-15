@@ -21,6 +21,9 @@ const App = () => {
     const [board, setBoard] = useState(
         Array.from({ length: 4 }, () => Array(4).fill(null))
     );
+    const [playerNames, setPlayerNames] = useState(
+        Array.from({ length: 4 }, () => Array(4).fill(null))
+    );
     const [turn, setTurn] = useState("X");
     const [hint, setHint] = useState([]);
 
@@ -55,6 +58,7 @@ const App = () => {
                         playerStats={playerStats} setPlayerStats={setPlayerStats}
                         board={board} setBoard={setBoard}
                         turn={turn} setTurn={setTurn} setHint={setHint}
+                        playerNames={playerNames} setPlayerNames={setPlayerNames}
                     />}                
                 </div>
                 <div className="flex-1">
@@ -63,7 +67,7 @@ const App = () => {
                                 board={board} setBoard={setBoard}
                                 hint={hint} setHint={setHint}
                                 activeMove={activeMove} setActiveMove={setActiveMove}
-                                turn={turn}
+                                turn={turn} playerNames={playerNames}
                     />
                 </div>
             </div>

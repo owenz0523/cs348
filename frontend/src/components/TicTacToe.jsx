@@ -4,8 +4,10 @@ import getHint from "../lib/tictactoe/getHint";
 
 const TicTacToe = (
     {winner, setWinner, playerStats, setPlayerStats, 
-        board, setBoard, hint, setHint, activeMove, setActiveMove, turn}
+        board, setBoard, hint, setHint, activeMove, setActiveMove, turn, playerNames}
 ) => {
+    // Add state to track hovered cell
+    const [hoveredCell, setHoveredCell] = useState(null);
 
     useEffect(() => {
         const loadBoard = async () => {
@@ -76,18 +78,29 @@ const TicTacToe = (
                     row.map((cell, colIndex) => (
                         <div
                             key={`${rowIndex}-${colIndex}`}
-                            className={`w-20 h-20 border border-gray-400 flex items-center justify-center text-l font-bold cursor-pointer select-none
+                            className={`w-20 h-20 border border-gray-400 flex items-center justify-center text-l font-bold cursor-pointer select-none relative group
                                 ${rowIndex > 0 && colIndex > 0 ? "hover:bg-gray-100" : ""}
                                 ${activeMove && rowIndex === activeMove.row && colIndex === activeMove.col ? "bg-blue-200 hover:bg-blue-100" : ""}
                             `}
                             onClick={() => handleClick(rowIndex, colIndex)}
                             onContextMenu={(e) => handleMenu(e, rowIndex, colIndex)}
+                            onMouseEnter={() => setHoveredCell({ row: rowIndex, col: colIndex })}
+                            onMouseLeave={() => setHoveredCell(null)}
                             >
                             {cell}
                         </div>
                     ))
                 )}
             </div>
+
+            {hoveredCell &&
+                hoveredCell.row > 0 && hoveredCell.col > 0 &&
+                playerNames[hoveredCell.row] && playerNames[hoveredCell.row][hoveredCell.col] && (
+                    <div className="mt-2 text-md text-gray-700 font-medium">
+                        Player: {playerNames[hoveredCell.row][hoveredCell.col]}
+                    </div>
+                )
+            }
 
             {hint.length > 0 && !winner &&
                 <div className="mt-4 p-2 border rounded bg-gray-50 text-sm text-gray-700 w-full max-w-md">
