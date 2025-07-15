@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import Literal
-from app import has_played_for_both_teams, get_players_with_prefix, get_players_with_teams, get_hint_for_teams, store_match_result_info, get_match_history, get_match_rows_cols, get_player_statistic
+from app import has_played_for_both_teams, get_players_with_prefix, get_players_with_teams, get_hint_for_teams, store_match_result_info, get_match_history, get_match_rows_cols, get_player_statistic, choose_random_statistic
 
 app = FastAPI()
 
@@ -116,4 +116,12 @@ def retrieve_player_statistic(player: Player):
     return JSONResponse(
         status_code=200,
         content=player_statistic
+    )
+
+@app.post("/retrieve_random_statistic")
+def retrieve_random_statistic():
+    random_stat = choose_random_statistic()
+    return JSONResponse(
+        status_code=200,
+        content=random_stat
     )

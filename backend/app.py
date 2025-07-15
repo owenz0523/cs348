@@ -179,5 +179,21 @@ def activate_clear_match_history_trigger():
     finally:
         conn.close()
 
+def choose_random_statistic():
+    transaction_sql = load_sql("../queries/choose_random_statistic.sql")
+    conn = connect()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(transaction_sql)
+            conn.commit()
+            cursor.execute("SELECT stat_name, sort_direction FROM random_stat LIMIT 1;")
+            row = cursor.fetchone()
+            if row:
+                return {"stat_name": row[0]}
+            else:
+                return None
+    finally:
+        conn.close()
+
 run_test_query()
 activate_clear_match_history_trigger()
