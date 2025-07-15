@@ -111,7 +111,7 @@ const TicTacToe = (
                                     </tr>
                                     <tr className="border-t">
                                         <td className="pr-2 py-1 font-medium">Stat:</td>
-                                        <td className="py-1">{playerStatsCache[hoveredCell.row][hoveredCell.col].stat_name}</td>
+                                        <td className="py-1">{playerStatsCache[hoveredCell.row][hoveredCell.col].stat_name.toUpperCase()}</td>
                                     </tr>
                                     <tr className="border-t">
                                         <td className="pr-2 py-1 font-medium">Value:</td>
