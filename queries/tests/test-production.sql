@@ -330,3 +330,82 @@ FROM match_history mh
 LEFT JOIN json_stats p1 ON p1.mid = mh.mid AND p1.player_role = 'P1'
 LEFT JOIN json_stats p2 ON p2.mid = mh.mid AND p2.player_role = 'P2'
 ORDER BY mh.played_at;
+
+-- testing random stat selection
+SELECT 'Testing random stat selection' AS test_description;
+
+DELETE FROM random_stat;
+DELETE FROM last_displayed_stats;
+
+INSERT INTO last_displayed_stats (stat) VALUES ('pts');
+
+BEGIN;
+
+DELETE FROM random_stat;
+
+WITH ordered_last AS ( 
+    SELECT stat
+    FROM last_displayed_stats
+    ORDER BY last_displayed DESC 
+    LIMIT 1
+)
+INSERT INTO random_stat 
+SELECT *
+FROM (
+    VALUES ('pts', 'desc'), ('reb', 'desc'), ('ast', 'desc'), ('stl', 'desc'), ('blk', 'desc'), ('tov', 'asc'), ('ft', 'desc'), ('fg', 'desc'), ('fg3', 'desc')
+) AS stat_directions(stat_name, sort_direction)
+WHERE stat_name NOT IN (SELECT stat FROM ordered_last)
+ORDER BY random()
+LIMIT 1;
+
+DELETE FROM last_displayed_stats
+WHERE stat IN (SELECT stat_name FROM random_stat);
+
+INSERT INTO last_displayed_stats (stat)
+SELECT stat_name FROM random_stat;
+
+COMMIT;
+
+SELECT * FROM random_stat;
+SELECT * FROM last_displayed_stats;
+
+-- testing get player statistic
+SELECT 'Testing get player statistic' AS test_description;
+
+WITH random_player AS (
+    SELECT pid FROM players ORDER BY random() LIMIT 1
+)
+, player_season_stats AS (
+    SELECT
+        g.season,
+        rs.stat_name,
+        rs.sort_direction,
+        ROUND(AVG(
+            CASE rs.stat_name
+                WHEN 'pts' THEN b.pts
+                WHEN 'reb' THEN b.reb
+                WHEN 'ast' THEN b.ast
+                WHEN 'stl' THEN b.stl
+                WHEN 'blk' THEN b.blk
+                WHEN 'tov' THEN b.tov
+                WHEN 'ft' THEN b.ft
+                WHEN 'fg' THEN b.fg
+                WHEN 'fg3' THEN b.fg3
+            END
+        )::NUMERIC, 2) AS avg_stat
+    FROM box_score b
+    INNER JOIN games g ON b.gid = g.gid
+    CROSS JOIN random_stat rs
+    WHERE b.pid = (SELECT pid FROM random_player)
+    GROUP BY g.season, rs.stat_name, rs.sort_direction
+)
+SELECT
+    (SELECT pid FROM random_player) AS pid,
+    season,
+    stat_name,
+    avg_stat
+FROM player_season_stats
+ORDER BY
+    CASE WHEN sort_direction = 'desc' THEN avg_stat END DESC,
+    CASE WHEN sort_direction = 'asc' THEN avg_stat END ASC
+LIMIT 1;

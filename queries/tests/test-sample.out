@@ -59,15 +59,15 @@
          pname         | mins | pts | reb | ast | stl | blk | tov | plus_minus 
 -----------------------+------+-----+-----+-----+-----+-----+-----+------------
  Luka Dončić           |   45 |  73 |  10 |   7 |   1 |   0 |   4 |         13
- Donovan Mitchell      |   50 |  71 |   8 |  11 |   0 |   1 |   4 |         19
  Damian Lillard        |   39 |  71 |   6 |   6 |   0 |   0 |   2 |         21
- Devin Booker          |   45 |  70 |   8 |   6 |   3 |   1 |   5 |         -6
+ Donovan Mitchell      |   50 |  71 |   8 |  11 |   0 |   1 |   4 |         19
  Joel Embiid           |   37 |  70 |  18 |   5 |   1 |   1 |   1 |         11
+ Devin Booker          |   45 |  70 |   8 |   6 |   3 |   1 |   5 |         -6
  Giannis Antetokounmpo |   37 |  64 |  14 |   3 |   4 |   1 |   4 |         29
- Karl-Anthony Towns    |   38 |  62 |   8 |   2 |   0 |   0 |   7 |          0
  Stephen Curry         |   36 |  62 |   5 |   4 |   0 |   0 |   5 |         20
  Devin Booker          |   38 |  62 |   5 |   4 |   1 |   2 |   4 |          1
- James Harden          |   40 |  61 |  15 |   4 |   5 |   0 |   5 |         19
+ Karl-Anthony Towns    |   38 |  62 |   8 |   2 |   0 |   0 |   7 |          0
+ Damian Lillard        |   45 |  61 |  10 |   7 |   1 |   0 |   2 |         13
 (10 rows)
 
     test_description     
@@ -127,12 +127,12 @@
  Testing hint generation
 (1 row)
 
-    pid    |      pname       | hint_category | table_order 
------------+------------------+---------------+-------------
- muscami01 | Mike Muscala     | Both Teams    |           1
- wallake01 | Keaton Wallace   | One Team      |           2
- brussni01 | Nicolás Brussino | One Team      |           2
- poirivi01 | Vincent Poirier  | One Team      |           2
+    pid    |       pname        | hint_category | table_order 
+-----------+--------------------+---------------+-------------
+ parkeja01 | Jabari Parker      | Both Teams    |           1
+ wallage01 | Gerald Wallace     | One Team      |           2
+ wrighbr03 | Brandan Wright     | One Team      |           2
+ clevean01 | Antonius Cleveland | One Team      |           2
 (4 rows)
 
             test_description             
@@ -142,7 +142,7 @@
 
  r1  | r2  | r3  | c1  | c2  | c3  
 -----+-----+-----+-----+-----+-----
- ATL | GSW | NYK | HOU | NOP | OKC
+ PHI | TOR | WAS | BOS | CHI | CHO
 (1 row)
 
         test_description        
@@ -162,6 +162,6 @@ INSERT 0 2
 COMMIT
  mid | result |         played_at          |                              p1_stats                              |                              p2_stats                              
 -----+--------+----------------------------+--------------------------------------------------------------------+--------------------------------------------------------------------
-  18 | P1 Win | 2025-07-08 16:46:38.092883 | {"correct_guesses" : 5, "incorrect_guesses" : 2, "hints_used" : 1} | {"correct_guesses" : 4, "incorrect_guesses" : 2, "hints_used" : 0}
+   4 | P1 Win | 2025-07-16 14:05:50.293058 | {"correct_guesses" : 5, "incorrect_guesses" : 2, "hints_used" : 1} | {"correct_guesses" : 4, "incorrect_guesses" : 2, "hints_used" : 0}
 (1 row)
 
