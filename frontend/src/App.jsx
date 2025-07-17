@@ -5,6 +5,7 @@ import InGameSearchPanel from "./components/InGameSearchPanel";
 import TicTacToe from "./components/TicTacToe";
 import RecentMatches from "./components/RecentMatches";
 import insertMatch from "./lib/recent_matches/insert_match";
+import Instructions from "./components/Instructions";
 
 const App = () => {
     const [winner, setWinner] = useState(null);
@@ -54,6 +55,7 @@ const App = () => {
                     <RecentMatches pendingMatch={pendingMatch} setPendingMatch={setPendingMatch}/>
                 </div>
                 <div className="w-1/4 border-r border-gray-300">
+                    {!winner && !activeMove && <Instructions/>}
                     {winner && <PostGameQueryPanel />}         
                     {activeMove && 
                     <InGameSearchPanel 
