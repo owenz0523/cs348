@@ -48,9 +48,9 @@ const App = () => {
 
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="h-screen overflow-hidden flex flex-col">
             <NavBar />
-            <div className="flex flex-1 min-w-full">
+            <div className="flex flex-1 min-w-full h-full">
                 <div className="w-1/5 border-r border-gray-300">
                     <RecentMatches pendingMatch={pendingMatch} setPendingMatch={setPendingMatch}/>
                 </div>
