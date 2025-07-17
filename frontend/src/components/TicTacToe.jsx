@@ -50,6 +50,14 @@ const TicTacToe = (
         }
     }, [board]);
 
+    const shuffleArray = (array) => {
+        for(let i = array.length - 1; i > 0; i--){
+            const j = Math.floor(Math.random()*(i+1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
     const handleClick = async (row, col) => {
         if(winner || row === 0 || col === 0 || board[row][col]){
             return;
@@ -65,7 +73,8 @@ const TicTacToe = (
         const team1 = board[0][col];
         const team2 = board[row][0];
         const hintArray = await getHint(team1, team2);
-        const hintPlayers = hintArray.map(p => p.pname);
+        const shuffledHints = shuffleArray(hintArray);
+        const hintPlayers = shuffledHints.map(p => p.pname);
         setHint(hintPlayers);
 
         let newPlayerStats = playerStats;
@@ -100,7 +109,7 @@ const TicTacToe = (
                 hoveredCell.row > 0 && hoveredCell.col > 0 &&
                 playerNames[hoveredCell.row] && playerNames[hoveredCell.row][hoveredCell.col] && playerNames[hoveredCell.row][hoveredCell.col].pname && (
                     <div className="mt-4 p-2 border rounded bg-gray-50 text-sm text-gray-700 w-full max-w-md">
-                        <h3 className="font-semibold mb-2">Player Info</h3>
+                        <h3 className="font-semibold mb-2">Random Player Stat of the Day!</h3>
                         <div className="font-medium mb-1">{playerNames[hoveredCell.row][hoveredCell.col].pname}</div>
                         {playerStatsCache && playerStatsCache[hoveredCell.row] && playerStatsCache[hoveredCell.row][hoveredCell.col] && (
                             <table className="w-full text-left">
