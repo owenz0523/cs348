@@ -16,7 +16,7 @@ DB_PORT=5432
 
 ### Setup
 
-Make sure to download PostgreSQL locally, spin up a local DB cluster, and initialize the env variables first with a local PostgreSQL database. Also make sure psql is added to path so that you can start a terminal session anywhere (or you can just use the psql shell straight from your pc). After loading the dataset, follow the steps to run the backend and frontend applications. The app should then be accessible at `http://localhost:5173`.
+Make sure to download PostgreSQL locally, spin up a local DB cluster, and initialize the env variables first with a local PostgreSQL database. Also make sure psql is added to path so that you can start a terminal session anywhere (or you can just use the psql shell straight from your pc). Also make sure to have Poetry and Node installed and add them to your PATH. After loading the dataset, follow the steps to run the backend and frontend applications. The app should then be accessible at `http://localhost:5173`.
 
 ### Loading the dataset
 
