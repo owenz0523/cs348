@@ -1,11 +1,7 @@
 # cs348
 
-### Current features
-As part of milestone 1, we have tic tac toe with teams as criteria on both rows and columns as the only game mode. Players must first enter an NBA player who has played for both the column and row teams, in order to play on that square. Players may request a hint by right clicking on the square, and four players will be displayed as hints, of which only one has played for both teams, and one or more others may have played for one of the teams. Once the game is complete, a query panel will appear on the left, allowing users to search for all players who have played for two selected teams. More advanced functionality will be implemented in future milestones. 
-
-### Database setup
-
-Make sure to download PostgreSQL locally, spin up a local DB cluster, and initialize the env variables first with a local PostgreSQL database. Also make sure psql is added to path so that you can start a terminal session anywhere (or you can just use the psql shell straight from your pc).
+### Basic features
+We have tic tac toe with teams as criteria on both rows and columns as the only game mode. Players must first enter an NBA player who has played for both the column and row teams, in order to play on that square. Players may request a hint by right clicking on the square, and four players will be displayed as hints, of which only one has played for both teams, and one or more others may have played for one of the teams. Once the game is complete, a query panel will appear on the left, allowing users to search for all players who have played for two selected teams. Users can also view the history of previous tic-tac-toe matches on the left hand side of the app.
 
 ### Environment variables setup
 
@@ -17,6 +13,10 @@ DB_PASSWORD=your_postgres_password_here
 DB_HOST=localhost
 DB_PORT=5432
 ```
+
+### Setup
+
+Make sure to download PostgreSQL locally, spin up a local DB cluster, and initialize the env variables first with a local PostgreSQL database. Also make sure psql is added to path so that you can start a terminal session anywhere (or you can just use the psql shell straight from your pc). After loading the dataset, follow the steps to run the backend and frontend applications. The app should then be accessible at `http://localhost:5173`.
 
 ### Loading the dataset
 
@@ -34,14 +34,6 @@ DB_PORT=5432
 
 6. (This may take ~3-4 minutes) Load the data with:  
    `poetry run python load.py`
-
-### Testing the (sample) dataset
-
-1. Run the command `psql -d nba_stats -f queries/tests/test-sample.sql > queries/tests/test-sample.out`
-
-### Testing the (production) dataset
-
-1. Run the command `psql -d nba_stats -f queries/tests/test-production.sql > queries/tests/test-production.out`
 
 ### Running backend application
 
@@ -64,3 +56,11 @@ DB_PORT=5432
 
 3. Run the application with:  
    `npm run dev`
+
+### Testing the (sample) dataset
+
+1. Run the command `psql -d nba_stats -f queries/tests/test-sample.sql > queries/tests/test-sample.out`
+
+### Testing the (production) dataset
+
+1. Run the command `psql -d nba_stats -f queries/tests/test-production.sql > queries/tests/test-production.out`
